@@ -1,0 +1,266 @@
+
+
+
+
+SELECT * FROM Students WHERE Gender = 'Female';
+
+
+
+
+
+
+//////////////////////////////////////////////////
+
+
+
+
+
+
+SELECT * FROM teachers WHERE Specialization IN ('Mathematics', 'Physics');
+
+
+
+
+
+//////////////////////////////////////////////////
+
+
+
+
+
+SELECT * FROM students WHERE DateOfBirth BETWEEN '2011-01-01' AND '2012-12-31';
+
+
+
+
+
+/////////////////////////////////////////////////
+
+
+
+
+SELECT * FROM courses ORDER BY CourseName ASC;
+
+
+
+
+////////////////////////////////////////////////
+
+
+
+
+
+SELECT * FROM students WHERE Name LIKE 'A%';
+
+
+
+
+
+///////////////////////////////////////////////
+
+
+
+
+
+SELECT * FROM students WHERE Name LIKE '%a%';
+
+
+
+
+//////////////////////////////////////////////
+
+
+
+
+SELECT MIN(Capacity) FROM classrooms;
+
+
+
+
+/////////////////////////////////////////////
+
+
+
+SELECT MAX(Capacity) FROM classrooms;
+
+
+
+
+/////////////////////////////////////////////
+
+
+
+
+SELECT AVG(Capacity) FROM classrooms;
+
+
+
+
+///////////////////////////////////////////
+
+
+
+
+SELECT COUNT(*) FROM students;
+
+
+
+
+//////////////////////////////////////////
+
+
+
+
+SELECT ClassroomID, COUNT(*) FROM students GROUP BY ClassroomID;
+
+
+
+
+//////////////////////////////////////////
+
+
+
+SELECT students.Name, classrooms.ClassroomName
+FROM students
+JOIN classrooms ON students.ClassroomID = classrooms.ClassroomID;
+
+
+
+
+///////////////////////////////////////////
+
+
+
+
+SELECT courses.CourseName, teachers.Name
+FROM courses
+JOIN teachers ON courses.TeacherID = teachers.TeacherID;
+
+
+
+
+////////////////////////////////////////////
+
+
+
+
+
+SELECT students.Name, attendance.AttendanceDate, attendance.AttendanceStatus
+FROM students
+LEFT JOIN attendance ON students.studentID = attendance.StudentID;
+
+
+
+////////////////////////////////////////////
+
+
+
+
+
+SELECT courses.CourseName, teachers.Name
+FROM courses
+LEFT JOIN teachers ON courses.TeacherID = Teachers.TeacherID;
+
+
+
+
+///////////////////////////////////////////////
+
+
+
+
+
+SELECT teachers.Name, courses.CourseName
+FROM teachers
+LEFT JOIN courses ON teachers.TeacherID = courses.TeacherID;
+
+
+////////////////////////////////////////////
+
+
+SELECT DISTINCT students.Name
+FROM students
+JOIN attendance ON students.studentID = attendance.StudentID
+WHERE attendance.AttendanceStatus = 'Present';
+
+
+
+///////////////////////////////////////////
+
+
+SELECT students.Name
+FROM students
+LEFT JOIN attendance ON students.StudentID = attendance.StudentID
+WHERE attendance.StudentID IS NULL;
+
+
+////////////////////////////////////////////
+
+
+SELECT CourseID, COUNT(StudentID) AS studentsCount
+FROM attendance
+GROUP BY CourseID
+HAVING COUNT(StudentID) > 1;
+
+
+///////////////////////////////////////////////////////////
+
+
+SELECT teachers.Name
+FROM teachers
+JOIN courses ON teachers.TeacherID = courses.TeacherID
+GROUP BY teachers.TeacherID
+ORDER BY COUNT(courses.CourseID) DESC
+LIMIT 1;
+
+///////////////////////////////////////////
+
+
+SELECT students.Name
+FROM students
+JOIN classrooms ON students.ClassroomID = classrooms.ClassroomID
+WHERE classrooms.Capacity = (SELECT MAX(Capacity) FROM classrooms);
+
+///////////////////////////////////////////////
+
+
+SELECT courses.CourseName
+FROM courses
+JOIN teachers ON courses.TeacherID = teachers.TeacherID
+WHERE teachers.Name = 'John Smith';
+
+/////////////////////////////////////
+
+
+SELECT DISTINCT students.Name
+FROM students
+JOIN attendance ON students.StudentID = attendance.StudentID
+JOIN courses ON attendance.CourseID = courses.CourseID
+WHERE courses.CourseName = 'Algebra I' AND attendance.AttendanceStatus = 'Present';
+
+//////////////////////////////////////////////////
+
+
+SELECT Specialization, COUNT(*) AS teachersCount
+FROM teachers
+GROUP BY Specialization;
+
+
+///////////////////////////////////////////////
+
+
+SELECT courses.CourseName, COUNT(attendance.StudentID) AS studentsCount
+FROM courses
+LEFT JOIN attendance ON courses.CourseID = attendance.CourseID
+GROUP BY courses.CourseID
+ORDER BY studentsCount DESC
+LIMIT 3;
+
+
+//////////////////////////////////////////////
+
+
+SELECT DISTINCT students.Name
+FROM students
+LEFT JOIN attendance ON students.StudentID = attendance.StudentID
+WHERE attendance.AttendanceStatus != 'Absent' OR attendance.AttendanceStatus IS NULL;
